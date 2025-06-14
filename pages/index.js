@@ -45,16 +45,19 @@ export default function App() {
     if (!selected || !keyword) return alert('Select a framework and enter a keyword first.');
     setOutput('');
     setLoading(true);
-    const res = await fetch(RUN_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        frameworkId: selected,
-        answers: { keyword },
-        userId: 'frontend-demo',
-        plan: 'ALLIN'
-      })
-    });
+const res = await fetch(RUN_URL, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY   // ⬅️ add this
+  },
+  body: JSON.stringify({
+    frameworkId: selected,
+    answers: { keyword },
+    userId: 'frontend-demo',
+    plan: 'ALLIN'
+  })
+});    
     if (!res.ok || !res.body) { setLoading(false); return alert('Error from server'); }
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
