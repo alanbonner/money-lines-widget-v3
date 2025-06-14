@@ -49,7 +49,7 @@ const res = await fetch(RUN_URL, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY   // ⬅️ add this
+    'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,   // ⬅️ add this
     'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`   // ← add this line
   },
   body: JSON.stringify({
