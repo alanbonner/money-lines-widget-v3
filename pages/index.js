@@ -49,8 +49,8 @@ const res = await fetch(RUN_URL, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,   // ⬅️ add this
-    'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`   // ← add this line
+    'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`
   },
   body: JSON.stringify({
     frameworkId: selected,
@@ -58,16 +58,16 @@ const res = await fetch(RUN_URL, {
     userId: 'frontend-demo',
     plan: 'ALLIN'
   })
-});    
-    if (!res.ok || !res.body) { setLoading(false); return alert('Error from server'); }
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    while(true) {
-      const {value, done} = await reader.read();
-      if(done) break;
-      setOutput(prev => prev + decoder.decode(value));
-    }
-    setLoading(false);
+});
+
+if (!res.ok) {
+  setLoading(false);
+  return alert('Edge function error: ' + (await res.text()));
+}
+
+const { content } = await res.json();   // ← non-streaming JSON
+setOutput(content);
+setLoading(false);
   };
 
   return (
